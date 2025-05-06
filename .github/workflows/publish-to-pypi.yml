@@ -1,0 +1,39 @@
+name: Publish Python Package to PyPI
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # Trigger workflow on tags like v1.0.0
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        # Fetches all history for all tags and branches
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x" # Use a recent Python 3 version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No longer needs PYPI_API_TOKEN if using trusted publishing
+        # with:
+        #   password: ${{ secrets.PYPI_API_TOKEN }}
+        #   # If using a TestPyPI token for testing:
+        #   # repository_url: https://test.pypi.org/legacy/
