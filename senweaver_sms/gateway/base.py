@@ -8,7 +8,7 @@ from datetime import datetime
 from ..phone_number import PhoneNumber
 from ..message import Message
 from ..response import SMSResponse
-from ..exception.gateway_error import GatewayErrorException
+from ..exception.exception import GatewayErrorException
 from ..config import GatewayConfig
 
 

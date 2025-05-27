@@ -1,7 +1,7 @@
 """
 短信请求类 - 统一的短信发送入口
 """
-from typing import Dict, Any, List, Union, Optional, Type
+from typing import Dict, Any, List, Union, Optional
 
 from .config import SMSConfig, GatewayConfig
 from .message import Message
@@ -10,10 +10,8 @@ from .gateway.base import BaseGateway
 from .strategy.base import BaseStrategy
 from .strategy.order import OrderStrategy
 from .response import SMSResponse, SMSBatchResponse
-from .exception.gateway_error import GatewayErrorException
-from .exception.no_gateway_available import NoGatewayAvailableException
-from .exception.no_gateway_selected import NoGatewaySelectedException
-from .exception.invalid_argument import InvalidArgumentException
+from .exception.exception import NoGatewayAvailableException, NoGatewaySelectedException, InvalidArgumentException
+
 
 
 class SMSRequest:

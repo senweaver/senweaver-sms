@@ -9,7 +9,7 @@ from typing import Dict, Any, Optional
 
 from ..phone_number import PhoneNumber
 from ..message import Message
-from ..exception.gateway_error import GatewayErrorException
+from ..exception.exception import GatewayErrorException
 from ..config import GatewayConfig
 from .base import BaseGateway
 

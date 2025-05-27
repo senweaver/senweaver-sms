@@ -1,5 +1,5 @@
 """Base exceptions for SenWeaver SMS."""
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 
 class Exception(Exception):
