@@ -3,37 +3,47 @@ name: Publish Python Package to PyPI
 on:
   push:
     tags:
-      - "v*.*.*" # Trigger workflow on tags like v1.0.0
+      - "v*.*.*"  # 仅当推送符合语义化版本标签时触发 (如 v0.1.0)
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-        # Fetches all history for all tags and branches
-        with:
-          fetch-depth: 0
+      id-token: write  # 必须开启 Trusted Publishing 权限
 
-      - name: Set up Python
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整提交历史
+
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x" # Use a recent Python 3 version
+          python-version: "3.12"  # 固定 Python 版本
 
-      - name: Install dependencies
+      - name: Install build tools
         run: |
           python -m pip install --upgrade pip
           pip install build twine
 
+      - name: Validate version consistency
+        run: |
+          # 从 Git 标签提取版本号 (如 v0.1.0 → 0.1.0)
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          
+          # 从 pyproject.toml 提取版本号 (需要安装 tomli)
+          pip install tomli
+          PY_VERSION=$(python -c "import tomli; print(tomli.load(open('pyproject.toml','rb'))['project']['version'])")
+          
+          # 验证一致性
+          if [ "$TAG_VERSION" != "$PY_VERSION" ]; then
+            echo "❌ Error: Git tag version ($TAG_VERSION) ≠ package version ($PY_VERSION)"
+            exit 1
+          fi
+
       - name: Build package
         run: python -m build
 
-      - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        # No longer needs PYPI_API_TOKEN if using trusted publishing
-        # with:
-        #   password: ${{ secrets.PYPI_API_TOKEN }}
-        #   # If using a TestPyPI token for testing:
-        #   # repository_url: https://test.pypi.org/legacy/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.0
