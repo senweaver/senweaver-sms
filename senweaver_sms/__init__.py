@@ -9,7 +9,7 @@ from .request import SMSRequest
 from .response import SMSResponse, SMSBatchResponse, SMSStatus, SMSError
 from .builder import SMSBuilder
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "senweaver"
 
 __all__ = [
