@@ -152,6 +152,24 @@ class SMSBuilder:
         
     def yunpian(self, api_key: str, sign: Optional[str] = None) -> 'SMSBuilder':
         return self.gateway(name="yunpian", app_id="", app_key=api_key, sign=sign)
+        
+    def mas(self, ap_id: str, secret_key: str, ec_name: str, sign: str, add_serial: str = "", endpoint: str = "http://112.35.1.155:1992/sms/norsubmit") -> 'SMSBuilder':
+        """
+        配置中国移动MAS短信网关
+        
+        Args:
+            ap_id: 应用ID
+            secret_key: 密钥
+            ec_name: 企业代码
+            sign: 签名
+            add_serial: 扩展码（可选）
+            endpoint: 接口地址
+            
+        Returns:
+            构建器实例
+        """
+        return self.gateway(name="mas", app_id=ap_id, app_key=secret_key, app_secret=ec_name, sign=sign, 
+                           add_serial=add_serial, endpoint=endpoint)
 
     # --- General Configuration Methods --- 
 
@@ -230,4 +248,4 @@ class SMSBuilder:
         )
         
         # 创建请求对象
-        return SMSRequest(config) 
+        return SMSRequest(config)

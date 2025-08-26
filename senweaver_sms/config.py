@@ -38,6 +38,9 @@ class GatewayConfig:
     # UCloud (ucloud)
     project_id: Optional[str] = None     # 项目ID (可选)
     
+    # 移动mas (mas)
+    add_serial: Optional[str] = None     # 扩展码 (可选, 默认为空字符串)
+    
     def __post_init__(self):
         """
         初始化后的处理，验证必要的配置
@@ -132,4 +135,4 @@ class SMSConfig:
         if name not in self.gateways:
             raise ValueError(f"网关 {name} 不存在")
         self.default_gateway = name
-        return self 
+        return self
